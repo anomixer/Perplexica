@@ -10,6 +10,7 @@ import NextError from 'next/error';
 import { useChat } from '@/lib/hooks/useChat';
 import Loader from './ui/Loader';
 import SettingsButtonMobile from './Settings/SettingsButtonMobile';
+import { useTranslations } from 'next-intl';
 
 export interface BaseMessage {
   chatId: string;
@@ -52,6 +53,7 @@ export interface File {
 }
 
 const ChatWindow = () => {
+  const t = useTranslations('ChatWindow');
   const { hasError, isReady, notFound, messages } = useChat();
   if (hasError) {
     return (
@@ -61,7 +63,7 @@ const ChatWindow = () => {
         </div>
         <div className="flex flex-col items-center justify-center min-h-screen">
           <p className="dark:text-white/70 text-black/70 text-sm">
-            Failed to connect to the server. Please try again later.
+            {t('connectionError')}
           </p>
         </div>
       </div>

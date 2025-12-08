@@ -17,41 +17,7 @@ import Models from './Sections/Models/Section';
 import SearchSection from './Sections/Search';
 import Select from '@/components/ui/Select';
 import Personalization from './Sections/Personalization';
-
-const sections = [
-  {
-    key: 'preferences',
-    name: 'Preferences',
-    description: 'Customize your application preferences.',
-    icon: Sliders,
-    component: Preferences,
-    dataAdd: 'preferences',
-  },
-  {
-    key: 'personalization',
-    name: 'Personalization',
-    description: 'Customize the behavior and tone of the model.',
-    icon: ToggleRight,
-    component: Personalization,
-    dataAdd: 'personalization',
-  },
-  {
-    key: 'models',
-    name: 'Models',
-    description: 'Connect to AI services and manage connections.',
-    icon: BrainCog,
-    component: Models,
-    dataAdd: 'modelProviders',
-  },
-  {
-    key: 'search',
-    name: 'Search',
-    description: 'Manage search settings.',
-    icon: Search,
-    component: SearchSection,
-    dataAdd: 'search',
-  },
-];
+import { useTranslations } from 'next-intl';
 
 const SettingsDialogue = ({
   isOpen,
@@ -60,6 +26,42 @@ const SettingsDialogue = ({
   isOpen: boolean;
   setIsOpen: (active: boolean) => void;
 }) => {
+  const t = useTranslations('Settings');
+
+  const sections = [
+    {
+      key: 'preferences',
+      name: t('general'),
+      description: t('generalDescription'),
+      icon: Sliders,
+      component: Preferences,
+      dataAdd: 'preferences',
+    },
+    {
+      key: 'personalization',
+      name: t('personalization'),
+      description: t('personalizationDescription'),
+      icon: ToggleRight,
+      component: Personalization,
+      dataAdd: 'personalization',
+    },
+    {
+      key: 'models',
+      name: t('models'),
+      description: t('modelsDescription'),
+      icon: BrainCog,
+      component: Models,
+      dataAdd: 'modelProviders',
+    },
+    {
+      key: 'search',
+      name: t('search'),
+      description: t('searchDescription'),
+      icon: Search,
+      component: SearchSection,
+      dataAdd: 'search',
+    },
+  ];
   const [isLoading, setIsLoading] = useState(true);
   const [config, setConfig] = useState<any>(null);
   const [activeSection, setActiveSection] = useState<string>(sections[0].key);
@@ -125,7 +127,7 @@ const SettingsDialogue = ({
                     className="text-black/50 dark:text-white/50 group-hover:text-black/70 group-hover:dark:text-white/70"
                   />
                   <p className="text-black/50 dark:text-white/50 group-hover:text-black/70 group-hover:dark:text-white/70 text-[14px]">
-                    Back
+                    {t('back')}
                   </p>
                 </button>
                 <div className="flex flex-col items-start space-y-1 mt-8">

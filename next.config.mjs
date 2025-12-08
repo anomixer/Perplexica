@@ -1,3 +1,7 @@
+import createNextIntlPlugin from 'next-intl/plugin';
+
+const withNextIntl = createNextIntlPlugin('./i18n.ts');
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
@@ -11,4 +15,4 @@ const nextConfig = {
   serverExternalPackages: ['pdf-parse'],
 };
 
-export default nextConfig;
+export default withNextIntl(nextConfig);

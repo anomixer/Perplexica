@@ -1,0 +1,72 @@
+{
+  "Sidebar": {
+    "search": "搜尋",
+    "settings": "設定",
+    "discover": "發現",
+    "library": "圖書館"
+  },
+  "Settings": {
+    "title": "設定",
+    "general": "一般",
+    "search": "搜尋",
+    "language": "語言",
+    "english": "英文",
+    "traditional_chinese": "繁體中文",
+    "generalDescription": "自訂您的應用程式偏好設定。",
+    "personalization": "個人化",
+    "personalizationDescription": "自訂模型的行為和語氣。",
+    "models": "模型",
+    "modelsDescription": "連線至 AI 服務並管理連線。",
+    "searchDescription": "管理搜尋設定。",
+    "back": "返回",
+    "themeName": "主題",
+    "themeDescription": "選擇應用程式的淺色或深色佈局。",
+    "lightName": "淺色",
+    "darkName": "深色",
+    "measureUnitName": "測量單位",
+    "measureUnitDescription": "選擇公制或英制測量單位。",
+    "ImperialName": "英制",
+    "MetricName": "公制",
+    "autoMediaSearchName": "自動影片和圖片搜尋",
+    "autoMediaSearchDescription": "自動搜尋相關的圖片和影片。",
+    "showWeatherWidgetName": "顯示天氣小工具",
+    "showWeatherWidgetDescription": "在主畫面上顯示天氣卡片。",
+    "showNewsWidgetName": "顯示新聞小工具",
+    "showNewsWidgetDescription": "在主畫面上顯示最新新聞卡片。",
+    "systemInstructionsName": "系統指示",
+    "systemInstructionsDescription": "為模型新增自訂行為或語氣。",
+    "searxngURLName": "SearXNG 網址",
+    "searxngURLDescription": "您的 SearXNG 執行個體的網址"
+  },
+  "SetupWizard": {
+    "welcome": "歡迎使用",
+    "subtitle1": "網路搜尋，",
+    "subtitle2": "重新構想",
+    "setupTitle1": "讓我們",
+    "setupTitle2": "為您設定"
+  },
+  "ChatWindow": {
+    "connectionError": "無法連線至伺服器。請稍後再試。"
+  },
+  "EmptyChat": {
+    "title": "研究從這裡開始。"
+  },
+  "EmptyChatMessageInput": {
+    "placeholder": "問任何問題..."
+  },
+  "SetupConfig": {
+    "fetchProvidersError": "無法取得提供者",
+    "loadProvidersError": "無法載入提供者",
+    "completeSetupError": "無法完成設定",
+    "manageConnections": "管理連線",
+    "addConnections": "新增連線以存取 AI 模型",
+    "loadingProviders": "正在載入提供者...",
+    "noConnectionsConfigured": "未設定連線",
+    "clickAddConnection": "點擊上方的「新增連線」開始",
+    "selectModels": "選取模型",
+    "selectModelsDescription": "選取您希望使用的模型。",
+    "next": "下一步",
+    "finish": "完成",
+    "finishing": "完成中..."
+  }
+}

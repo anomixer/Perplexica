@@ -2,6 +2,7 @@ import configManager from '@/lib/config';
 import ModelRegistry from '@/lib/models/registry';
 import { NextRequest, NextResponse } from 'next/server';
 import { ConfigModelProvider } from '@/lib/config/types';
+import { getTranslations } from 'next-intl/server';
 
 type SaveConfigBody = {
   key: string;
@@ -10,8 +11,10 @@ type SaveConfigBody = {
 
 export const GET = async (req: NextRequest) => {
   try {
+    const locale = req.cookies.get('NEXT_LOCALE')?.value || 'en';
+    const t = await getTranslations({ locale, namespace: 'Settings' });
     const values = configManager.getCurrentConfig();
-    const fields = configManager.getUIConfigSections();
+    const fields = configManager.getUIConfigSections(t);
 
     const modelRegistry = new ModelRegistry();
     const modelProviders = await modelRegistry.getActiveProviders();

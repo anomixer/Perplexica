@@ -376,7 +376,27 @@ class ConfigManager {
     this.saveConfig();
   }
 
-  public getUIConfigSections(): UIConfigSections {
+  public getUIConfigSections(t: (key: string) => string): UIConfigSections {
+    this.uiConfigSections.preferences.forEach((field) => {
+      field.name = t(field.key + 'Name');
+      field.description = t(field.key + 'Description');
+      if (field.type === 'select') {
+        field.options.forEach((option) => {
+          option.name = t(option.value + 'Name');
+        });
+      }
+    });
+
+    this.uiConfigSections.personalization.forEach((field) => {
+      field.name = t(field.key + 'Name');
+      field.description = t(field.key + 'Description');
+    });
+
+    this.uiConfigSections.search.forEach((field) => {
+      field.name = t(field.key + 'Name');
+      field.description = t(field.key + 'Description');
+    });
+
     return this.uiConfigSections;
   }
 

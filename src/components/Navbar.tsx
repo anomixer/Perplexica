@@ -66,8 +66,12 @@ const exportAsMarkdown = (sections: Section[], title: string) => {
   downloadFile(`${title || 'chat'}.md`, md, 'text/markdown');
 };
 
+import '@fontsource/noto-sans-tc';
+
 const exportAsPDF = (sections: Section[], title: string) => {
   const doc = new jsPDF();
+  doc.addFont('node_modules/@fontsource/noto-sans-tc/files/noto-sans-tc-chinese-traditional-400-normal.woff', 'NotoSansTC', 'normal');
+  doc.setFont('NotoSansTC');
   const date = new Date(
     sections[0]?.userMessage?.createdAt || Date.now(),
   ).toLocaleString();
@@ -91,9 +95,9 @@ const exportAsPDF = (sections: Section[], title: string) => {
         doc.addPage();
         y = 15;
       }
-      doc.setFont('helvetica', 'bold');
+      doc.setFont('NotoSansTC', 'bold');
       doc.text('User', 10, y);
-      doc.setFont('helvetica', 'normal');
+      doc.setFont('NotoSansTC', 'normal');
       doc.setFontSize(10);
       doc.setTextColor(120);
       doc.text(

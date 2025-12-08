@@ -1,0 +1,72 @@
+{
+  "Sidebar": {
+    "search": "Search",
+    "settings": "Settings",
+    "discover": "Discover",
+    "library": "Library"
+  },
+  "Settings": {
+    "title": "Settings",
+    "general": "General",
+    "search": "Search",
+    "language": "Language",
+    "english": "English",
+    "traditional_chinese": "Traditional Chinese",
+    "generalDescription": "Customize your application preferences.",
+    "personalization": "Personalization",
+    "personalizationDescription": "Customize the behavior and tone of the model.",
+    "models": "Models",
+    "modelsDescription": "Connect to AI services and manage connections.",
+    "searchDescription": "Manage search settings.",
+    "back": "Back",
+    "themeName": "Theme",
+    "themeDescription": "Choose between light and dark layouts for the app.",
+    "lightName": "Light",
+    "darkName": "Dark",
+    "measureUnitName": "Measurement Unit",
+    "measureUnitDescription": "Choose between Metric  and Imperial measurement unit.",
+    "ImperialName": "Imperial",
+    "MetricName": "Metric",
+    "autoMediaSearchName": "Auto video & image search",
+    "autoMediaSearchDescription": "Automatically search for relevant images and videos.",
+    "showWeatherWidgetName": "Show weather widget",
+    "showWeatherWidgetDescription": "Display the weather card on the home screen.",
+    "showNewsWidgetName": "Show news widget",
+    "showNewsWidgetDescription": "Display the recent news card on the home screen.",
+    "systemInstructionsName": "System Instructions",
+    "systemInstructionsDescription": "Add custom behavior or tone for the model.",
+    "searxngURLName": "SearXNG URL",
+    "searxngURLDescription": "The URL of your SearXNG instance"
+  },
+  "SetupWizard": {
+    "welcome": "Welcome to",
+    "subtitle1": "Web search,",
+    "subtitle2": "reimagined",
+    "setupTitle1": "Let us get",
+    "setupTitle2": "set up for you"
+  },
+  "ChatWindow": {
+    "connectionError": "Failed to connect to the server. Please try again later."
+  },
+  "EmptyChat": {
+    "title": "Research begins here."
+  },
+  "EmptyChatMessageInput": {
+    "placeholder": "Ask anything..."
+  },
+  "SetupConfig": {
+    "fetchProvidersError": "Failed to fetch providers",
+    "loadProvidersError": "Failed to load providers",
+    "completeSetupError": "Failed to complete setup",
+    "manageConnections": "Manage Connections",
+    "addConnections": "Add connections to access AI models",
+    "loadingProviders": "Loading providers...",
+    "noConnectionsConfigured": "No connections configured",
+    "clickAddConnection": "Click \"Add Connection\" above to get started",
+    "selectModels": "Select models",
+    "selectModelsDescription": "Select models which you wish to use.",
+    "next": "Next",
+    "finish": "Finish",
+    "finishing": "Finishing..."
+  }
+}
