@@ -7,13 +7,19 @@ type Theme = 'dark' | 'light' | 'system';
 
 const ThemeSwitcher = ({ className }: { className?: string }) => {
   const [mounted, setMounted] = useState(false);
-
   const { theme, setTheme } = useTheme();
 
   const isTheme = useCallback((t: Theme) => t === theme, [theme]);
 
-  const handleThemeSwitch = (theme: Theme) => {
-    setTheme(theme);
+  const handleThemeSwitch = (newTheme: Theme) => {
+    setTheme(newTheme);
+    // 同步到 localStorage（next-themes 會自動處理，但我們明確保存）
+    localStorage.setItem('theme', newTheme);
+    
+    // 觸發自定義事件通知其他組件
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new Event('client-config-changed'));
+    }
   };
 
   useEffect(() => {
@@ -27,8 +33,10 @@ const ThemeSwitcher = ({ className }: { className?: string }) => {
       );
 
       const detectThemeChange = (event: MediaQueryListEvent) => {
-        const theme: Theme = event.matches ? 'dark' : 'light';
-        setTheme(theme);
+        // 系統模式下觸發事件讓其他組件知道
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new Event('client-config-changed'));
+        }
       };
 
       preferDarkScheme.addEventListener('change', detectThemeChange);
@@ -39,7 +47,7 @@ const ThemeSwitcher = ({ className }: { className?: string }) => {
     }
   }, [isTheme, setTheme, theme]);
 
-  // Avoid Hydration Mismatch
+  // 避免 Hydration Mismatch
   if (!mounted) {
     return null;
   }
@@ -52,6 +60,7 @@ const ThemeSwitcher = ({ className }: { className?: string }) => {
       options={[
         { value: 'light', label: 'Light' },
         { value: 'dark', label: 'Dark' },
+        { value: 'system', label: 'System' },
       ]}
     />
   );
