@@ -11,6 +11,7 @@ import {
 } from '@headlessui/react';
 import { jsPDF } from 'jspdf';
 import { useChat, Section } from '@/lib/hooks/useChat';
+import { SourceBlock } from '@/lib/types';
 import { toast } from 'sonner';
 
 const downloadFile = (filename: string, content: string, type: string) => {
@@ -29,33 +30,41 @@ const downloadFile = (filename: string, content: string, type: string) => {
 
 const exportAsMarkdown = (sections: Section[], title: string) => {
   const date = new Date(
-    sections[0]?.userMessage?.createdAt || Date.now(),
+    sections[0].message.createdAt || Date.now(),
   ).toLocaleString();
   let md = `# 💬 Chat Export: ${title}\n\n`;
   md += `*Exported on: ${date}*\n\n---\n`;
 
   sections.forEach((section, idx) => {
-    if (section.userMessage) {
+    md += `\n---\n`;
+    md += `**🧑 User**
+`;
+    md += `*${new Date(section.message.createdAt).toLocaleString()}*\n\n`;
+    md += `> ${section.message.query.replace(/\n/g, '\n> ')}\n`;
+
+    if (section.message.responseBlocks.length > 0) {
       md += `\n---\n`;
-      md += `**🧑 User**  \n`;
-      md += `*${new Date(section.userMessage.createdAt).toLocaleString()}*\n\n`;
-      md += `> ${section.userMessage.content.replace(/\n/g, '\\n> ')}\n`;
+      md += `**🤖 Assistant**
+`;
+      md += `*${new Date(section.message.createdAt).toLocaleString()}*\n\n`;
+      md += `> ${section.message.responseBlocks
+        .filter((b) => b.type === 'text')
+        .map((block) => block.data)
+        .join('\n')
+        .replace(/\n/g, '\n> ')}\n`;
     }
 
-    if (section.assistantMessage) {
-      md += `\n---\n`;
-      md += `**🤖 Assistant**  \n`;
-      md += `*${new Date(section.assistantMessage.createdAt).toLocaleString()}*\n\n`;
-      md += `> ${section.assistantMessage.content.replace(/\n/g, '\\n> ')}\n`;
-    }
+    const sourceResponseBlock = section.message.responseBlocks.find(
+      (block) => block.type === 'source',
+    ) as SourceBlock | undefined;
 
     if (
-      section.sourceMessage &&
-      section.sourceMessage.sources &&
-      section.sourceMessage.sources.length > 0
+      sourceResponseBlock &&
+      sourceResponseBlock.data &&
+      sourceResponseBlock.data.length > 0
     ) {
       md += `\n**Citations:**\n`;
-      section.sourceMessage.sources.forEach((src: any, i: number) => {
+      sourceResponseBlock.data.forEach((src: any, i: number) => {
         const url = src.metadata?.url || '';
         md += `- [${i + 1}] [${url}](${url})\n`;
       });
@@ -86,7 +95,7 @@ function blobToBase64(blob: Blob): Promise<string> {
  */
 const cleanMarkdown = (text: string): string => {
   return text
-    .replace(/<think>[\s\S]*?<\/think>/g, '') // 移除 think 標籤
+    .replace(/[\s\S]*?<\/think>/g, '') // 移除 think 標籤
     .replace(/<citation[^>]*>.*?<\/citation>/g, '') // 移除 citation 標籤
     .replace(/\*\*(.*?)\*\*/g, '$1') // 移除粗體
     .replace(/\*(.*?)\*/g, '$1') // 移除斜體  
@@ -227,7 +236,7 @@ const exportAsPDF = async (sections: Section[], title: string) => {
     console.log('Font mapping:', Object.fromEntries(fontMap));
 
     const date = new Date(
-      sections[0]?.userMessage?.createdAt || Date.now(),
+      sections[0].message.createdAt || Date.now(),
     ).toLocaleString();
 
     let y = 15;
@@ -279,7 +288,7 @@ const exportAsPDF = async (sections: Section[], title: string) => {
 
     sections.forEach((section, idx) => {
       // 用戶消息
-      if (section.userMessage) {
+      if (section.message.query) {
         if (y > pageHeight - 30) {
           doc.addPage();
           y = 15;
@@ -295,7 +304,7 @@ const exportAsPDF = async (sections: Section[], title: string) => {
         doc.setFontSize(10);
         doc.setTextColor(120);
         doc.text(
-          `${new Date(section.userMessage.createdAt).toLocaleString()}`,
+          `${new Date(section.message.createdAt).toLocaleString()}`,
           margin + 20,
           y,
         );
@@ -303,7 +312,7 @@ const exportAsPDF = async (sections: Section[], title: string) => {
 
         doc.setTextColor(30);
         doc.setFontSize(11);
-        const cleanedUser = cleanMarkdown(section.userMessage.content);
+        const cleanedUser = cleanMarkdown(section.message.query);
         const userLines = doc.splitTextToSize(cleanedUser, maxWidth - 2);
 
         for (let i = 0; i < userLines.length; i++) {
@@ -348,7 +357,7 @@ const exportAsPDF = async (sections: Section[], title: string) => {
       }
 
       // 助手消息
-      if (section.assistantMessage) {
+      if (section.message.responseBlocks.length > 0) {
         if (y > pageHeight - 30) {
           doc.addPage();
           y = 15;
@@ -364,7 +373,7 @@ const exportAsPDF = async (sections: Section[], title: string) => {
         doc.setFontSize(10);
         doc.setTextColor(120);
         doc.text(
-          `${new Date(section.assistantMessage.createdAt).toLocaleString()}`,
+          `${new Date(section.message.createdAt).toLocaleString()}`,
           margin + 30,
           y,
         );
@@ -372,7 +381,11 @@ const exportAsPDF = async (sections: Section[], title: string) => {
 
         doc.setTextColor(30);
         doc.setFontSize(11);
-        const cleanedAssistant = cleanMarkdown(section.assistantMessage.content);
+        const assistantText = section.message.responseBlocks
+          .filter((b) => b.type === 'text')
+          .map((block) => block.data)
+          .join('\n');
+        const cleanedAssistant = cleanMarkdown(assistantText);
         const assistantLines = doc.splitTextToSize(cleanedAssistant, maxWidth - 2);
 
         for (let i = 0; i < assistantLines.length; i++) {
@@ -405,10 +418,14 @@ const exportAsPDF = async (sections: Section[], title: string) => {
         }
 
         // 引用來源
+        const sourceResponseBlock = section.message.responseBlocks.find(
+          (block) => block.type === 'source',
+        ) as SourceBlock | undefined;
+
         if (
-          section.sourceMessage &&
-          section.sourceMessage.sources &&
-          section.sourceMessage.sources.length > 0
+          sourceResponseBlock &&
+          sourceResponseBlock.data &&
+          sourceResponseBlock.data.length > 0
         ) {
           y += 3;
           doc.setFontSize(10);
@@ -423,7 +440,7 @@ const exportAsPDF = async (sections: Section[], title: string) => {
           y += 5;
 
           doc.setFont(primaryFont, 'normal');
-          section.sourceMessage.sources.forEach((src: any, i: number) => {
+          sourceResponseBlock.data.forEach((src: any, i: number) => {
             const url = src.metadata?.url || '';
             if (y > pageHeight - 15) {
               doc.addPage();
@@ -450,7 +467,7 @@ const exportAsPDF = async (sections: Section[], title: string) => {
       }
     });
 
-    // 頁碼
+    // 頁數
     const totalPages = (doc as any).internal.getNumberOfPages();
     doc.setFont(primaryFont, 'normal');
     for (let i = 1; i <= totalPages; i++) {
@@ -495,15 +512,16 @@ const Navbar = () => {
   const { sections, chatId } = useChat();
 
   useEffect(() => {
-    if (sections.length > 0 && sections[0].userMessage) {
+    if (sections.length > 0 && sections[0].message) {
       const newTitle =
-        sections[0].userMessage.content.length > 20
-          ? `${sections[0].userMessage.content.substring(0, 20).trim()}...`
-          : sections[0].userMessage.content;
+        sections[0].message.query.length > 30
+          ? `${sections[0].message.query.substring(0, 30).trim()}...`
+          : sections[0].message.query || 'New Conversation';
+
       setTitle(newTitle);
       const newTimeAgo = formatTimeDifference(
         new Date(),
-        sections[0].userMessage.createdAt,
+        sections[0].message.createdAt,
       );
       setTimeAgo(newTimeAgo);
     }
@@ -511,10 +529,10 @@ const Navbar = () => {
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      if (sections.length > 0 && sections[0].userMessage) {
+      if (sections.length > 0 && sections[0].message) {
         const newTimeAgo = formatTimeDifference(
           new Date(),
-          sections[0].userMessage.createdAt,
+          sections[0].message.createdAt,
         );
         setTimeAgo(newTimeAgo);
       }
