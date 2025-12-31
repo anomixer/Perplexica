@@ -8,18 +8,18 @@ import { toast } from 'sonner';
 
 const ExportPDF = () => {
   const [exporting, setExporting] = useState(false);
-  const { messages, chatTurns } = useChat();
+  const { messages, sections } = useChat();
 
   const handleExport = async () => {
     console.log('=== Export button clicked ===');
     console.log('Messages count:', messages.length);
     console.log('Exporting state:', exporting);
-    
+
     if (exporting) {
       console.log('Already exporting, returning...');
       return;
     }
-    
+
     if (messages.length === 0) {
       console.log('No messages, returning...');
       return;
@@ -27,15 +27,15 @@ const ExportPDF = () => {
 
     setExporting(true);
     const toastId = toast.loading('Generating PDF...');
-    
+
     try {
       console.log('Step 1: Checking fonts...');
       await loadPDFFonts();
       console.log('Fonts check passed');
 
-      const title = chatTurns[0]?.content.substring(0, 50) || 'Perplexica Chat';
+      const title = messages[0]?.query.substring(0, 50) || 'Perplexica Chat';
       console.log('Step 2: Title:', title);
-      
+
       console.log('Step 3: Starting exportChatToPDF...');
       await exportChatToPDF(messages, title);
       console.log('Export completed!');
@@ -45,12 +45,12 @@ const ExportPDF = () => {
       console.error('=== Export error ===');
       console.error('Error type:', typeof error);
       console.error('Error:', error);
-      
+
       if (error instanceof Error) {
         console.error('Error message:', error.message);
         console.error('Error stack:', error.stack);
       }
-      
+
       toast.error(
         `Export failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
         { id: toastId, duration: 5000 }
