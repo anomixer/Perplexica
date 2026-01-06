@@ -10,6 +10,7 @@ import ThemeProvider from '@/components/theme/Provider';
 import configManager from '@/lib/config';
 import SetupWizard from '@/components/Setup/SetupWizard';
 import { ChatProvider } from '@/lib/hooks/useChat';
+import Script from 'next/script';
 
 const montserrat = Montserrat({
   weight: ['300', '400', '500', '700'],
@@ -34,6 +35,33 @@ export default function RootLayout({
 
   return (
     <html className="h-full" lang="en" suppressHydrationWarning>
+      <head>
+        {/* Anti-flash script - must run before body */}
+        <Script
+          id="theme-init"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var theme = localStorage.getItem('theme');
+                  var supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+                  
+                  if (!theme && supportDarkMode) {
+                    document.documentElement.classList.add('dark');
+                  } else if (theme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                  } else {
+                    document.documentElement.classList.remove('dark');
+                  }
+                } catch (e) {
+                  console.error('Theme initialization error:', e);
+                }
+              })();
+            `,
+          }}
+        />
+      </head>
       <body className={cn('h-full antialiased', montserrat.className)}>
         <ThemeProvider>
           {setupComplete ? (

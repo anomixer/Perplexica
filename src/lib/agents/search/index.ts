@@ -102,7 +102,7 @@ class SearchAgent {
       searchResults?.searchFindings
         .map(
           (f, index) =>
-            `<result index=${index + 1} title=${f.metadata.title}>${f.content}</result>`,
+            `<result index=${index + 1} title=${f.metadata.title}>${f.content.substring(0, 10000)}</result>`,
         )
         .join('\n') || '';
 

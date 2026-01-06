@@ -24,25 +24,41 @@ export const searchSearxng = async (
 ) => {
   const searxngURL = getSearxngURL();
 
-  const url = new URL(`${searxngURL}/search?format=json`);
-  url.searchParams.append('q', query);
-
-  if (opts) {
-    Object.keys(opts).forEach((key) => {
-      const value = opts[key as keyof SearxngSearchOptions];
-      if (Array.isArray(value)) {
-        url.searchParams.append(key, value.join(','));
-        return;
-      }
-      url.searchParams.append(key, value as string);
-    });
+  if (!searxngURL) {
+    console.error('SearXNG URL is not configured.');
+    return { results: [], suggestions: [] };
   }
 
-  const res = await fetch(url);
-  const data = await res.json();
+  try {
+    const url = new URL(`${searxngURL}/search?format=json`);
+    url.searchParams.append('q', query);
 
-  const results: SearxngSearchResult[] = data.results;
-  const suggestions: string[] = data.suggestions;
+    if (opts) {
+      Object.keys(opts).forEach((key) => {
+        const value = opts[key as keyof SearxngSearchOptions];
+        if (Array.isArray(value)) {
+          url.searchParams.append(key, value.join(','));
+          return;
+        }
+        url.searchParams.append(key, value as string);
+      });
+    }
 
-  return { results, suggestions };
+    const res = await fetch(url);
+
+    if (!res.ok) {
+      console.error(`SearXNG error: ${res.status} ${res.statusText}`);
+      return { results: [], suggestions: [] };
+    }
+
+    const data = await res.json();
+
+    const results: SearxngSearchResult[] = data.results || [];
+    const suggestions: string[] = data.suggestions || [];
+
+    return { results, suggestions };
+  } catch (err) {
+    console.error(`Error fetching from SearXNG: ${err}`);
+    return { results: [], suggestions: [] };
+  }
 };

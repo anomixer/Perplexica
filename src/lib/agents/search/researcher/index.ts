@@ -63,6 +63,7 @@ class Researcher {
         i,
         maxIteration,
         input.config.fileIds,
+        input.config.systemInstructions,
       );
 
       const actionStream = input.config.llm.streamText({
@@ -172,11 +173,17 @@ class Researcher {
       actionOutput.push(...actionResults);
 
       actionResults.forEach((action, i) => {
+        // Truncate individual tool results to avoid token explosion (approx 15k chars per result)
+        const content = JSON.stringify(action);
+        const truncatedContent = content.length > 15000
+          ? content.substring(0, 15000) + "... [Content Truncated for token limit]"
+          : content;
+
         agentMessageHistory.push({
           role: 'tool',
           id: finalToolCalls[i].id,
           name: finalToolCalls[i].name,
-          content: JSON.stringify(action),
+          content: truncatedContent,
         });
       });
     }

@@ -8,6 +8,10 @@
 [![GitHub last commit](https://img.shields.io/github/last-commit/ItzCrazyKns/Perplexica?color=green)](https://github.com/ItzCrazyKns/Perplexica/commits/master)
 [![Discord](https://dcbadge.limes.pink/api/server/26aArMy8tT?style=flat)](https://discord.gg/26aArMy8tT)
 
+> 🌏 **Looking for CJK (Chinese, Japanese, Korean) Optimized Version?**
+> This fork includes deep optimizations for Traditional Chinese, stable PDF export (Source Han Sans), and localization fixes.
+> [Read the README-CJK.md here](./README-CJK.md) / [查看繁體中文說明文件](./README-CJK.md)
+
 Perplexica is a **privacy-focused AI answering engine** that runs entirely on your own hardware. It combines knowledge from the vast internet with support for **local LLMs** (Ollama) and cloud providers (OpenAI, Claude, Groq), delivering accurate answers with **cited sources** while keeping your searches completely private.
 
 ![preview](.assets/perplexica-screenshot.png)

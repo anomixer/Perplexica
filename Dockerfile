@@ -12,6 +12,7 @@ COPY src ./src
 COPY public ./public
 COPY drizzle ./drizzle
 
+
 RUN mkdir -p /home/perplexica/data
 RUN yarn build
 

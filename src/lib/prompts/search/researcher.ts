@@ -6,6 +6,7 @@ const getSpeedPrompt = (
   i: number,
   maxIteration: number,
   fileDesc: string,
+  systemInstructions: string,
 ) => {
   const today = new Date().toLocaleDateString('en-US', {
     year: 'numeric',
@@ -72,17 +73,17 @@ const getSpeedPrompt = (
 - Default to web_search when information is missing or stale; keep queries targeted (max 3 per call).
 - Call done when you have gathered enough to answer or performed the required actions.
 - Do not invent tools. Do not return JSON.
+- **Language**: Your reasoning and tool usage descriptions MUST be in the same language as the user's query or the following system instructions: ${systemInstructions}
   </response_protocol>
 
-  ${
-    fileDesc.length > 0
+  ${fileDesc.length > 0
       ? `<user_uploaded_files>
   The user has uploaded the following files which may be relevant to their request:
   ${fileDesc}
   You can use the uploaded files search tool to look for information within these documents if needed.
   </user_uploaded_files>`
       : ''
-  }
+    }
   `;
 };
 
@@ -91,6 +92,7 @@ const getBalancedPrompt = (
   i: number,
   maxIteration: number,
   fileDesc: string,
+  systemInstructions: string,
 ) => {
   const today = new Date().toLocaleDateString('en-US', {
     year: 'numeric',
@@ -173,17 +175,17 @@ const getBalancedPrompt = (
 - Do not stop after a single information-gathering call unless the task is trivial or prior results already cover the answer.
 - Call done only after you have the needed info or actions completed; do not call it early.
 - Do not invent tools. Do not return JSON.
+- **Language**: Your reasoning and tool usage descriptions MUST be in the same language as the user's query or the following system instructions: ${systemInstructions}
   </response_protocol>
 
-  ${
-    fileDesc.length > 0
+  ${fileDesc.length > 0
       ? `<user_uploaded_files>
   The user has uploaded the following files which may be relevant to their request:
   ${fileDesc}
   You can use the uploaded files search tool to look for information within these documents if needed.
   </user_uploaded_files>`
       : ''
-  }
+    }
   `;
 };
 
@@ -192,6 +194,7 @@ const getQualityPrompt = (
   i: number,
   maxIteration: number,
   fileDesc: string,
+  systemInstructions: string,
 ) => {
   const today = new Date().toLocaleDateString('en-US', {
     year: 'numeric',
@@ -303,17 +306,17 @@ const getQualityPrompt = (
 - Aim for 4-7 information-gathering calls covering different angles; cross-reference and follow up on interesting leads.
 - Call done only after comprehensive, multi-angle research is complete.
 - Do not invent tools. Do not return JSON.
+- **Language**: Your reasoning and tool usage descriptions MUST be in the same language as the user's query or the following system instructions: ${systemInstructions}
   </response_protocol>
 
-  ${
-    fileDesc.length > 0
+  ${fileDesc.length > 0
       ? `<user_uploaded_files>
   The user has uploaded the following files which may be relevant to their request:
   ${fileDesc}
   You can use the uploaded files search tool to look for information within these documents if needed.
   </user_uploaded_files>`
       : ''
-  }
+    }
   `;
 };
 
@@ -323,6 +326,7 @@ export const getResearcherPrompt = (
   i: number,
   maxIteration: number,
   fileIds: string[],
+  systemInstructions: string,
 ) => {
   let prompt = '';
 
@@ -337,16 +341,40 @@ export const getResearcherPrompt = (
 
   switch (mode) {
     case 'speed':
-      prompt = getSpeedPrompt(actionDesc, i, maxIteration, fileDesc);
+      prompt = getSpeedPrompt(
+        actionDesc,
+        i,
+        maxIteration,
+        fileDesc,
+        systemInstructions,
+      );
       break;
     case 'balanced':
-      prompt = getBalancedPrompt(actionDesc, i, maxIteration, fileDesc);
+      prompt = getBalancedPrompt(
+        actionDesc,
+        i,
+        maxIteration,
+        fileDesc,
+        systemInstructions,
+      );
       break;
     case 'quality':
-      prompt = getQualityPrompt(actionDesc, i, maxIteration, fileDesc);
+      prompt = getQualityPrompt(
+        actionDesc,
+        i,
+        maxIteration,
+        fileDesc,
+        systemInstructions,
+      );
       break;
     default:
-      prompt = getSpeedPrompt(actionDesc, i, maxIteration, fileDesc);
+      prompt = getSpeedPrompt(
+        actionDesc,
+        i,
+        maxIteration,
+        fileDesc,
+        systemInstructions,
+      );
       break;
   }
 

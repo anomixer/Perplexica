@@ -42,6 +42,8 @@ For the standalone follow up, you have to generate a self contained, context ind
 You basically have to rephrase the user's query in a way that it can be understood without any prior context from the conversation history.
 Say for example the converastion is about cars and the user says "How do they work" then the standalone follow up should be "How do cars work?"
 
+**Language**: The standalone follow-up MUST be in the same language as the user's original query (e.g., if the user asks in Traditional Chinese, the standalone follow-up MUST be in Traditional Chinese).
+
 Do not contain excess information or everything that has been discussed before, just reformulate the user's last query in a self contained manner.
 The standalone follow-up should be concise and to the point.
 </standalone_followup>

@@ -35,10 +35,14 @@ class ConfigManager {
             name: 'Dark',
             value: 'dark',
           },
+          {
+            name: 'System',
+            value: 'system',
+          },
         ],
         required: false,
-        description: 'Choose between light and dark layouts for the app.',
-        default: 'dark',
+        description: 'Choose between light, dark, or system theme for the app.',
+        default: 'system',
         scope: 'client',
       },
       {
