@@ -72,4 +72,4 @@ EXPOSE 3000 8080
 
 ENV SEARXNG_API_URL=http://localhost:8080
 
-CMD ["/home/perplexica/entrypoint.sh"]
+CMD ["sh", "-c", "PORT=3000 /home/perplexica/entrypoint.sh"]
