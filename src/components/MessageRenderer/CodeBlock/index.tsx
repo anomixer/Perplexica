@@ -50,6 +50,7 @@ const CodeBlock = ({
           />
         )}
       </button>
+      {/* @ts-ignore */}
       <SyntaxHighlighter
         language={language}
         style={syntaxTheme}
