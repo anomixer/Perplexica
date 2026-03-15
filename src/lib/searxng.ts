@@ -72,5 +72,4 @@ export const searchSearxng = async (
   } finally {
     clearTimeout(timeoutId);
   }
-  }
 };
