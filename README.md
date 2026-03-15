@@ -42,6 +42,8 @@ Want to know more about its architecture and how it works? You can read it [here
 
 🕒 **Search history** - Every search is saved locally so you can revisit your discoveries anytime. Your research is never lost.
 
+🛡️ **Enhanced Resilience** - Improved SearXNG web search stability with timeouts and robust error handling for UI widgets, preventing unexpected crashes.
+
 ✨ **More coming soon** - We're actively developing new features based on community feedback. Join our Discord to help shape Perplexica's future!
 
 ## Sponsors
