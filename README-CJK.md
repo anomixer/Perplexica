@@ -239,7 +239,7 @@ docker run -d -p 3000:3000 \
   -v perplexica-data:/home/perplexica/data \
   -v perplexica-uploads:/home/perplexica/uploads \
   --name perplexica \
-  ghcr.io/anomixer/perplexica:latest
+  ghcr.io/anomixer/vane:latest
 ```
 
 **特色：**
@@ -273,7 +273,7 @@ docker run -d -p 3000:3000 \
 version: '3'
 services:
   perplexica:
-    image: ghcr.io/anomixer/perplexica:latest
+    image: ghcr.io/anomixer/vane:latest
     container_name: perplexica
     restart: unless-stopped
     ports:
