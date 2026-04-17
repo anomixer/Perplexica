@@ -304,14 +304,14 @@ services:
 2. 克隆儲存庫：
 
    ```bash
-   git clone https://github.com/anomixer/Perplexica.git
-   cd Perplexica
+   git clone https://github.com/anomixer/Vane.git
+   cd Vane
    ```
 
-3. 安裝依賴：
+3. 安裝依賴 (建議加上 --legacy-peer-deps 避免依賴衝突)：
 
    ```bash
-   npm i
+   npm i --legacy-peer-deps
    ```
 
 4. 建構應用程式：
