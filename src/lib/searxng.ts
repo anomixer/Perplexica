@@ -47,20 +47,23 @@ export const searchSearxng = async (
     });
 
     if (!res.ok) {
-      throw new Error(`SearXNG error: ${res.statusText}`);
+      console.error(`SearXNG error: ${res.status} ${res.statusText}`);
+      return { results: [], suggestions: [] };
     }
 
     const data = await res.json();
 
-    const results: SearxngSearchResult[] = data.results;
-    const suggestions: string[] = data.suggestions;
+    const results: SearxngSearchResult[] = data.results || [];
+    const suggestions: string[] = data.suggestions || [];
 
     return { results, suggestions };
   } catch (err: any) {
     if (err.name === 'AbortError') {
-      throw new Error('SearXNG search timed out');
+      console.error('SearXNG search timed out');
+      return { results: [], suggestions: [] };
     }
-    throw err;
+    console.error(`Error fetching from SearXNG: ${err}`);
+    return { results: [], suggestions: [] };
   } finally {
     clearTimeout(timeoutId);
   }
